@@ -1,7 +1,7 @@
 import {ArrowUpRight} from "lucide-react";
 import {SiteFooter,SiteHeader} from "@/components/SiteChrome";
 import PageCta from "@/components/PageCta";
-export const metadata={title:"Solar Projects | SURJO Energy Bangladesh",description:"Selected residential, commercial and industrial solar projects across Bangladesh."};
+export const metadata={title:"Solar Projects | Nirvana Power Tech Bangladesh",description:"Selected residential, commercial and industrial solar projects across Bangladesh."};
 const work=[
  ["Gazipur","Garments rooftop","1.2 MWp","On-grid EPC","p0"],["Chattogram","Cold-storage hybrid","420 kWp","Solar + BESS","p1"],["Narayanganj","Textile production roof","860 kWp","Net metered","p2"],["Rajshahi","Family home","8 kWp","Hybrid backup","p3"],["Dhaka","Corporate office","96 kWp","On-grid","p4"],["Cumilla","Agro processing","260 kWp","Captive solar","p5"]
 ];

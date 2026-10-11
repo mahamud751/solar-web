@@ -2,7 +2,7 @@ import {BatteryCharging,Building2,Check,Factory,HousePlug,SunMedium,Wrench} from
 import {SiteFooter,SiteHeader} from "@/components/SiteChrome";
 import PageCta from "@/components/PageCta";
 import Link from "next/link";
-export const metadata={title:"Solar Solutions | SURJO Energy Bangladesh",description:"On-grid, hybrid, residential, commercial and industrial solar systems for Bangladesh."};
+export const metadata={title:"Solar Solutions | Nirvana Power Tech Bangladesh",description:"On-grid, hybrid, residential, commercial and industrial solar systems for Bangladesh."};
 const systems=[
  {icon:HousePlug,title:"Residential solar",range:"3–20 kWp",text:"Homes, apartment common areas and small businesses. Choose on-grid savings or hybrid backup.",items:["Load and roof assessment","Mobile monitoring","Battery-ready options"]},
  {icon:Building2,title:"Commercial solar",range:"20–500 kWp",text:"Lower daytime energy cost for offices, hospitals, schools, retail and cold storage.",items:["Net-metering support","Cashflow and ROI model","Minimal operating disruption"]},

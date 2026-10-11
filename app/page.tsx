@@ -116,7 +116,7 @@ export default function Home() {
             <Sun />
           </b>
           <span>
-            SURJO<small>ENERGY</small>
+            NIRVANA<small>POWER TECH</small>
           </span>
         </Link>
         <nav className={menu ? "open" : ""}>
@@ -298,7 +298,7 @@ export default function Home() {
           </span>
         </div>
         <div>
-          <label>WHY SURJO</label>
+          <label>WHY NIRVANA POWER TECH</label>
           <h2>
             Engineered for
             <br />
@@ -306,7 +306,7 @@ export default function Home() {
           </h2>
           <p>
             উচ্চ তাপমাত্রা, আর্দ্রতা, ধুলা, বজ্রপাত এবং ছাদের কাঠামো—সব বিবেচনায়
-            নিয়েই প্রতিটি SURJO system তৈরি হয়।
+            নিয়েই প্রতিটি Nirvana Power Tech system তৈরি হয়।
           </p>
           <ul>
             {[
@@ -496,7 +496,7 @@ export default function Home() {
               <Sun />
             </b>
             <span>
-              SURJO<small>ENERGY</small>
+              NIRVANA<small>POWER TECH</small>
             </span>
           </Link>
           <p>
@@ -516,11 +516,14 @@ export default function Home() {
           <a href="tel:+8801700000000">+880 1700-000000</a>
           <a href="mailto:hello@surjo.energy">hello@surjo.energy</a>
           <Link href="/contact">Request proposal</Link>
+          <a href="https://www.facebook.com/nirvanapowertech/" target="_blank" rel="noopener noreferrer">
+            Facebook
+          </a>
           <span>Dhaka, Bangladesh</span>
         </div>
       </footer>
       <div className="copyright">
-        © 2026 SURJO Energy Ltd. <span>Made for a brighter Bangladesh 🇧🇩</span>
+        © 2026 Nirvana Power Tech <span>Made for a brighter Bangladesh 🇧🇩</span>
       </div>
       <a className="wa" href="https://wa.me/8801700000000">
         <MessageCircle />

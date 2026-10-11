@@ -6,8 +6,8 @@ const manrope = Manrope({ subsets: ["latin"], variable: "--font-sans" });
 const editorial = Instrument_Serif({ weight: "400", subsets: ["latin"], variable: "--font-serif" });
 
 export const metadata: Metadata = {
-  title: "HELIO — Power made limitless",
-  description: "A new standard in intelligent solar infrastructure.",
+  title: "Nirvana Power Tech — Solar Solutions in Bangladesh",
+  description: "Nirvana Power Tech designs and installs on-grid, hybrid and rooftop solar systems across Bangladesh.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
