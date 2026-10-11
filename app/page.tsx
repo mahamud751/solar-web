@@ -17,7 +17,6 @@ import {
   MessageCircle,
   Phone,
   ShieldCheck,
-  Sun,
   X,
   Zap,
 } from "lucide-react";
@@ -105,15 +104,15 @@ export default function Home() {
     <main>
       <div className="top">
         <span>সারাদেশে ফ্রি প্রাথমিক consultation</span>
-        <a href="tel:+8801700000000">
+        <a href="tel:+8801711064667">
           <Phone />
-          +880 1700-000000
+          +880 1711-064667
         </a>
       </div>
       <header>
         <Link className="brand" href="/">
           <b>
-            <Sun />
+            <img src="/nirvana-mark.jpg" alt="Nirvana Power Tech logo" />
           </b>
           <span>
             NIRVANA<small>POWER TECH</small>
@@ -333,24 +332,24 @@ export default function Home() {
             <div>
               <label>SELECTED WORK</label>
               <h2>
-                Real rooftops.
+                Real products.
                 <br />
                 <em>Real impact.</em>
               </h2>
             </div>
             <p>
-              Family home থেকে factory floor—unused roof space এখন reliable
-              energy asset.
+              রাস্তা, বাড়ি, মসজিদ, চা-বাগান—সূর্যের আলোতে চার্জ, রাতে উজ্জ্বল
+              আলো।
             </p>
           </div>
           <div className="projectGrid">
             {[
-              ["Gazipur", "Garments rooftop solar", "1.2 MW On-grid"],
-              ["Chattogram", "Cold storage hybrid", "420 kW + BESS"],
-              ["Rajshahi", "Family home backup", "8 kW Hybrid"],
+              ["200W", "FILATEC 200W solar street light", "বড় রাস্তা, চা-বাগান ও প্রজেক্ট এলাকার জন্য", "/facebook/filatec-200w.jpg"],
+              ["Complete set", "Light, pole, arm & remote", "সমগ্র বাংলাদেশে ডেলিভারি", "/facebook/complete-set.jpg"],
+              ["100W", "100W full setup — ৳6,500", "15 ft M.S pole · LiFePO4 · IP65", "/facebook/filatec-100w-offer.jpg"],
             ].map((x, i) => (
               <article className={i === 0 ? "big" : ""} key={x[0]}>
-                <div className={`photo p${i}`}>
+                <div className="photo" style={{ backgroundImage: `url('${x[3]}')` }}>
                   <span>{x[0]}</span>
                 </div>
                 <h3>{x[1]}</h3>
@@ -394,7 +393,7 @@ export default function Home() {
             <em>উত্তর এখানে।</em>
           </h2>
           <p>আরও জানতে আমাদের solar advisor-এর সাথে কথা বলুন।</p>
-          <a href="https://wa.me/8801700000000">
+          <a href="https://wa.me/8801711064667">
             <MessageCircle /> WhatsApp us
           </a>
         </div>
@@ -421,14 +420,14 @@ export default function Home() {
           <p>
             Form পূরণ করুন। আমাদের advisor এক কর্মদিবসের মধ্যে যোগাযোগ করবেন।
           </p>
-          <a href="tel:+8801700000000">
-            <Phone /> +880 1700-000000
+          <a href="tel:+8801711064667">
+            <Phone /> +880 1711-064667
           </a>
-          <a href="mailto:hello@surjo.energy">
-            <Mail /> hello@surjo.energy
+          <a href="mailto:nirvanapowertec@gmail.com">
+            <Mail /> nirvanapowertec@gmail.com
           </a>
           <span>
-            <MapPin /> Banani, Dhaka
+            <MapPin /> Jail Road, Sylhet
           </span>
         </div>
         {sent ? (
@@ -493,7 +492,7 @@ export default function Home() {
         <div>
           <Link className="brand" href="/">
             <b>
-              <Sun />
+              <img src="/nirvana-mark.jpg" alt="Nirvana Power Tech logo" />
             </b>
             <span>
               NIRVANA<small>POWER TECH</small>
@@ -513,19 +512,19 @@ export default function Home() {
         </div>
         <div>
           <b>Contact</b>
-          <a href="tel:+8801700000000">+880 1700-000000</a>
-          <a href="mailto:hello@surjo.energy">hello@surjo.energy</a>
+          <a href="tel:+8801711064667">+880 1711-064667</a>
+          <a href="mailto:nirvanapowertec@gmail.com">nirvanapowertec@gmail.com</a>
           <Link href="/contact">Request proposal</Link>
           <a href="https://www.facebook.com/nirvanapowertech/" target="_blank" rel="noopener noreferrer">
             Facebook
           </a>
-          <span>Dhaka, Bangladesh</span>
+          <span>Jail Road, Sylhet</span>
         </div>
       </footer>
       <div className="copyright">
         © 2026 Nirvana Power Tech <span>Made for a brighter Bangladesh 🇧🇩</span>
       </div>
-      <a className="wa" href="https://wa.me/8801700000000">
+      <a className="wa" href="https://wa.me/8801711064667">
         <MessageCircle />
       </a>
     </main>
