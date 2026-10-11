@@ -1,0 +1,8 @@
+import {ArrowUpRight} from "lucide-react";
+import {SiteFooter,SiteHeader} from "@/components/SiteChrome";
+import PageCta from "@/components/PageCta";
+export const metadata={title:"Solar Projects | SURJO Energy Bangladesh",description:"Selected residential, commercial and industrial solar projects across Bangladesh."};
+const work=[
+ ["Gazipur","Garments rooftop","1.2 MWp","On-grid EPC","p0"],["Chattogram","Cold-storage hybrid","420 kWp","Solar + BESS","p1"],["Narayanganj","Textile production roof","860 kWp","Net metered","p2"],["Rajshahi","Family home","8 kWp","Hybrid backup","p3"],["Dhaka","Corporate office","96 kWp","On-grid","p4"],["Cumilla","Agro processing","260 kWp","Captive solar","p5"]
+];
+export default function Projects(){return <><SiteHeader/><main className="inner"><section className="pageHero"><span>PROJECTS</span><h1>Built to perform.<br/><em>Proven in the field.</em></h1><p>Selected examples across Bangladesh. Final case-study figures should be replaced with verified client data before launch.</p></section><section className="projectArchive">{work.map((x,i)=><article key={x[1]}><div className={`archivePhoto ${x[4]}`}><span>{x[0]}</span></div><small>PROJECT 0{i+1}</small><div><h2>{x[1]}</h2><ArrowUpRight/></div><p>{x[2]} · {x[3]}</p></article>)}</section><section className="impactBand"><div><strong>18 MWp</strong><span>Installed portfolio</span></div><div><strong>650+</strong><span>Systems delivered</span></div><div><strong>64</strong><span>District coverage</span></div><p>Illustrative business metrics—connect these to your verified company records before publishing.</p></section><PageCta/></main><SiteFooter/></>}
