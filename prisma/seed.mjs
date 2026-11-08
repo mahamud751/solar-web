@@ -1,0 +1,316 @@
+import { PrismaClient } from "@prisma/client";
+import { hash } from "bcryptjs";
+
+const prisma = new PrismaClient();
+
+const categories = [
+  { name: "Filatec Solar Street Light", slug: "filatec", sortOrder: 1 },
+  { name: "MODI Solar Street Light", slug: "modi", sortOrder: 2 },
+  { name: "Nirvana Solar Street Light", slug: "nirvana", sortOrder: 3 },
+  { name: "Solar Street Light Packages", slug: "packages", sortOrder: 4 },
+];
+
+const products = [
+  {
+    slug: "filatec-100w-solar-street-light",
+    name: "Filatec 100W Solar Street Light",
+    brand: "Filatec",
+    power: "100W",
+    category: "filatec",
+    price: 6500,
+    callForPrice: false,
+    stock: 20,
+    featured: true,
+    image: "/facebook/filatec-100w-offer.jpg",
+    warranty: "1 year full warranty",
+    description: "100W Filatec solar street light for lanes, homes, and small roads. The site offer for the full setup is ৳6,500.",
+    features: "Zero electric bill\nSmart remote control\nIP65 waterproof body\n15 ft M.S pole on the published full setup",
+  },
+  {
+    slug: "filatec-200w-complete-package",
+    name: "Filatec 200W Solar Street Light – Complete Package",
+    brand: "Filatec",
+    power: "200W",
+    category: "filatec",
+    price: 8500,
+    callForPrice: false,
+    stock: 16,
+    featured: true,
+    image: "/facebook/filatec-200w.jpg",
+    warranty: "Ask",
+    description: "Complete 200W Filatec package with pole, arm, fittings, and remote. Published price ৳8,500.",
+    features: "200W light\n20 ft M.S pole\nSilver light arm\nFittings and remote included",
+  },
+  {
+    slug: "filatec-200w-premium-road-light",
+    name: "Filatec 200W Premium Solar Road Street Light",
+    brand: "Filatec",
+    power: "200W",
+    category: "filatec",
+    price: null,
+    callForPrice: true,
+    stock: 10,
+    featured: false,
+    image: "/facebook/filatec-200w.jpg",
+    warranty: "Ask",
+    description: "Premium 200W Filatec road light with charging options and motion sensing. Price is confirmed on call.",
+    features: "Solar charging and mobile charger charging\nBattery level display\nPIR sensor\nON/OFF control",
+  },
+  {
+    slug: "filatec-300w-complete-package",
+    name: "Filatec 300W Solar Street Light – Complete Package",
+    brand: "Filatec",
+    power: "300W",
+    category: "filatec",
+    price: 11000,
+    callForPrice: false,
+    stock: 12,
+    featured: true,
+    image: "/facebook/complete-set.jpg",
+    warranty: "Ask",
+    description: "300W Filatec complete package for wider roads. Published price ৳11,000.",
+    features: "20 ft pole\nLight arm, fittings, and remote\nLiFePO4 battery\nIP65 body",
+  },
+  {
+    slug: "filatec-400w-solar-street-light",
+    name: "Filatec 400W Solar Street Light",
+    brand: "Filatec",
+    power: "400W",
+    category: "filatec",
+    price: null,
+    callForPrice: true,
+    stock: 8,
+    featured: false,
+    image: "/facebook/cctv-lighting.jpg",
+    warranty: "Ask",
+    description: "400W Filatec light for large open areas. Call for the current quotation.",
+    features: "Smart PIR motion sensor\n20AH battery\nIP65 waterproof\nFull remote control",
+  },
+  {
+    slug: "modi-150w-md-slt27150w",
+    name: "MODI 150W Solar Street Light (MD-SLT27150W)",
+    brand: "MODI",
+    power: "150W",
+    category: "modi",
+    price: null,
+    callForPrice: true,
+    stock: 14,
+    featured: true,
+    image: "/facebook/complete-set.jpg",
+    warranty: "3 years warranty + 6 months replacement (one post says 2 years — confirm before sale)",
+    description: "MODI 150W dusk-to-dawn street light supplied with a 20 ft pole and fittings.",
+    features: "Day-night auto sensor\nAbout 12 hours of light\nIP65\n20 ft pole and fittings",
+  },
+  {
+    slug: "modi-200w-solar-street-light",
+    name: "MODI 200W Solar Street Light",
+    brand: "MODI",
+    power: "200W",
+    category: "modi",
+    price: null,
+    callForPrice: true,
+    stock: 10,
+    featured: false,
+    image: "/facebook/cctv-lighting.jpg",
+    warranty: "Ask",
+    description: "200W MODI LED street light with panel, battery, and pole fittings.",
+    features: "200W MODI LED light\nHigh-capacity solar panel\nLong-life battery\nPole, bracket, and fittings\nIP65",
+  },
+  {
+    slug: "modi-300w-solar-street-light",
+    name: "MODI 300W Solar Street Light",
+    brand: "MODI",
+    power: "300W",
+    category: "modi",
+    price: null,
+    callForPrice: true,
+    stock: 8,
+    featured: true,
+    image: "/facebook/cctv-lighting.jpg",
+    warranty: "Ask",
+    description: "MODI 300W light for big roads, markets, and factories.",
+    features: "IP65 waterproof\nLong backup\nWide area coverage",
+  },
+  {
+    slug: "nirvana-basic-30w-complete",
+    name: "Nirvana Basic Series 30W (Complete Package)",
+    brand: "Nirvana Power Tech",
+    power: "30W",
+    category: "nirvana",
+    price: null,
+    callForPrice: true,
+    stock: 18,
+    featured: true,
+    image: "/facebook/filatec-100w.jpg",
+    warranty: "1 year guarantee + 4 years warranty",
+    description: "Model NPT-32W complete package: panel, controller, battery, pole, structure, and light arm.",
+    features: "65W mono panel\nSmart controller\n15 Amp LiFePO4 battery\nPole in GI, MS, or GP\nStructure and light arm",
+  },
+  {
+    slug: "nirvana-30w-offer",
+    name: "Nirvana 30W Solar Street Light (Offer)",
+    brand: "Nirvana Power Tech",
+    power: "30W",
+    category: "nirvana",
+    price: null,
+    callForPrice: true,
+    stock: 18,
+    featured: false,
+    image: "/facebook/filatec-100w-offer.jpg",
+    warranty: "1 year warranty",
+    description: "Offer model that charges through the day and lights from dusk to dawn.",
+    features: "Daytime charging\nDusk-to-dawn lighting\nDhamaka offer — confirm the current price",
+  },
+  {
+    slug: "nirvana-200w-solar-street-light",
+    name: "Nirvana 200W Solar Street Light",
+    brand: "Nirvana Power Tech",
+    power: "200W",
+    category: "nirvana",
+    price: null,
+    callForPrice: true,
+    stock: 8,
+    featured: false,
+    image: "/facebook/cctv-lighting.jpg",
+    warranty: "Ask",
+    description: "200W Nirvana light for factories, tea gardens, and CCTV areas. Installation can be included.",
+    features: "High brightness\nZero electric bill\nInstallation included\nSuitable for factories, tea gardens, and CCTV areas",
+  },
+  {
+    slug: "240w-complete-solution",
+    name: "240W Solar Street Light (Complete Solution)",
+    brand: "Nirvana Power Tech",
+    power: "240W",
+    category: "nirvana",
+    price: null,
+    callForPrice: true,
+    stock: 6,
+    featured: false,
+    image: "/facebook/complete-set.jpg",
+    warranty: "Ask",
+    description: "Complete 240W solution with panel, LED light, battery, pole, and accessories. Brand was not stated on the source post.",
+    features: "Solar panel\nLED light\nBattery\nPole and accessories",
+  },
+  {
+    slug: "nirvana-led-10w-40w",
+    name: "Nirvana Solar LED Street Light (10W–40W)",
+    brand: "Nirvana Power Tech",
+    power: "10W–40W",
+    category: "nirvana",
+    price: null,
+    callForPrice: true,
+    stock: 24,
+    featured: false,
+    image: "/facebook/filatec-100w.jpg",
+    warranty: "3 years warranty",
+    description: "Smaller Nirvana LED street lights, listed as BUET tested, with dusk-to-dawn backup.",
+    features: "10W to 40W range\nBUET tested\nDusk-to-dawn backup",
+  },
+  {
+    slug: "filatec-100-300w-set",
+    name: "Filatec Solar Street Light (100W / 200W / 300W set)",
+    brand: "Filatec",
+    power: "100–300W",
+    category: "filatec",
+    price: null,
+    callForPrice: true,
+    stock: 10,
+    featured: false,
+    image: "/facebook/complete-set.jpg",
+    warranty: "Ask",
+    description: "Full Filatec set covering the 100W, 200W, and 300W range with light, pole, and remote.",
+    features: "Light, pole, and remote\nLiFePO4 battery\nIP65\nSmart remote",
+  },
+  {
+    slug: "package-1-15w",
+    name: "Solar Street Light Package 1",
+    brand: "Nirvana Power Tech",
+    power: "15W",
+    category: "packages",
+    price: null,
+    callForPrice: true,
+    stock: 15,
+    featured: false,
+    image: "/facebook/complete-set.jpg",
+    warranty: "Ask",
+    description: "Ready package with a 15W LED light and 60W panel, plus pole and fittings.",
+    features: "15W LED light\n60W solar panel\n20 ft M.S pole, silver coated\n40 inch G.L light arm\nPanel frame and fitting accessories",
+  },
+  {
+    slug: "package-2-20w",
+    name: "Solar Street Light Package 2",
+    brand: "Nirvana Power Tech",
+    power: "20W",
+    category: "packages",
+    price: null,
+    callForPrice: true,
+    stock: 15,
+    featured: true,
+    image: "/facebook/filatec-100w-offer.jpg",
+    warranty: "Ask",
+    description: "Ready package with a 20W LED light and an 80W mono panel. One post lists the panel as 85W.",
+    features: "20W LED light\n80W mono panel (one post says 85W)\n20 ft M.S pole, silver coated\n40 inch G.L light arm\nPanel frame and fitting accessories",
+  },
+  {
+    slug: "package-3-30w",
+    name: "Solar Street Light Package 3",
+    brand: "Nirvana Power Tech",
+    power: "30W",
+    category: "packages",
+    price: null,
+    callForPrice: true,
+    stock: 15,
+    featured: false,
+    image: "/facebook/filatec-200w.jpg",
+    warranty: "Ask",
+    description: "Ready package with a 30W LED light and 130W mono panel. One post mentions a 300W light — confirm before quoting.",
+    features: "30W LED light\n130W mono panel\n20 ft M.S pole, silver coated\n40 inch G.L light arm\nPanel frame and fitting accessories",
+  },
+];
+
+async function main() {
+  const categoryIds = new Map();
+  for (const category of categories) {
+    const saved = await prisma.category.upsert({
+      where: { slug: category.slug },
+      update: { name: category.name, sortOrder: category.sortOrder },
+      create: category,
+    });
+    categoryIds.set(category.slug, saved.id);
+  }
+
+  for (const product of products) {
+    const existing = await prisma.product.findUnique({ where: { slug: product.slug } });
+    if (existing) continue;
+    const { category, ...data } = product;
+    await prisma.product.create({
+      data: { ...data, categoryId: categoryIds.get(category) },
+    });
+  }
+
+  const adminEmail = "admin@nirvanapowertech.com";
+  const admin = await prisma.user.findUnique({ where: { email: adminEmail } });
+  if (!admin) {
+    await prisma.user.create({
+      data: {
+        name: "Nirvana Admin",
+        email: adminEmail,
+        phone: "01711064667",
+        role: "ADMIN",
+        district: "Sylhet",
+        address: "Jail Road, Sylhet 3100",
+        passwordHash: await hash("Admin@12345", 12),
+      },
+    });
+  }
+}
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (error) => {
+    console.error(error);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
