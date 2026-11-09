@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   ArrowRight,
   BatteryCharging,
@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { AccountMenu } from "@/components/AccountMenu";
 import { addToCart } from "@/app/actions/cart";
+import { DISTRICTS, formatBdt, FREE_SHIPPING_FROM, SHIPPING_FEE } from "@/lib/constants";
 
 export type HomeProduct = {
   id: string;
@@ -33,89 +34,71 @@ export type HomeProduct = {
   priceText: string;
   canBuy: boolean;
 };
+const lights = [
+  { name: "Filatec 100W complete", price: 6500 },
+  { name: "Filatec 200W complete", price: 8500 },
+  { name: "Filatec 300W complete", price: 11000 },
+];
 const solutions = [
   {
     icon: HousePlug,
-    bn: "বাসাবাড়ি",
-    title: "Home Solar",
-    text: "বিদ্যুৎ বিল কমান, লোডশেডিংয়ে সচল থাকুন। ছাদ ও ব্যবহারের ধরন অনুযায়ী সম্পূর্ণ সিস্টেম।",
-    size: "3–20 kW",
+    bn: "গলি ও বাড়ি",
+    title: "Lane & home",
+    text: "বাড়ি, মসজিদ ও সরু রাস্তার জন্য ছোট সোলার স্ট্রিট লাইট। দিনে চার্জ, সন্ধ্যা থেকে ভোর আলো।",
+    size: "10–100W",
   },
   {
     icon: Building2,
-    bn: "ব্যবসা",
-    title: "Commercial",
-    text: "অফিস, হাসপাতাল ও শপিং স্পেসের জন্য net-metering ready solar—কম খরচ, পরিষ্কার হিসাব।",
-    size: "20–500 kW",
+    bn: "রাস্তা ও মার্কেট",
+    title: "Road & market",
+    text: "রাস্তা, বাজার ও খোলা জায়গার জন্য পোলসহ কমপ্লিট সেট। লাইট, প্যানেল, ব্যাটারি ও ফিটিংস একসাথে।",
+    size: "150–300W",
   },
   {
     icon: Factory,
-    bn: "শিল্প",
-    title: "Industrial",
-    text: "কারখানা ও গার্মেন্টসের ছাদকে উৎপাদনশীল asset-এ রূপ দিন। EPC থেকে O&M—সব একসাথে।",
-    size: "500 kW–10 MW",
+    bn: "কারখানা ও বাগান",
+    title: "Yard & garden",
+    text: "কারখানা, চা-বাগান ও CCTV এরিয়ার জন্য বেশি ওয়াটের স্ট্রিট লাইট। ইনস্টলেশন আলাদা করে বলা যায়।",
+    size: "200–400W",
   },
 ];
 const steps = [
-  [
-    "01",
-    "Site survey",
-    "আপনার ছাদ, ছায়া, লোড ও মিটার পরীক্ষা করবেন আমাদের engineer.",
-  ],
-  [
-    "02",
-    "Design & proposal",
-    "Layout, production estimate, ROI ও financing সহ পরিষ্কার proposal.",
-  ],
-  [
-    "03",
-    "Installation",
-    "সার্টিফায়েড টিম ও মানসম্মত safety practice দিয়ে installation.",
-  ],
-  [
-    "04",
-    "Net metering",
-    "আবেদন, documents ও meter চালু করা পর্যন্ত সম্পূর্ণ সহায়তা।",
-  ],
+  ["01", "Choose the light", "ওয়াট ও ব্র্যান্ড বাছুন—Filatec, MODI, অথবা Nirvana।"],
+  ["02", "Confirm the set", "পোলের উচ্চতা, আর্ম ও কয়টি লাইট লাগবে, সেটা ঠিক করি।"],
+  ["03", "We deliver", "Jail Road, Sylhet থেকে সারা বাংলাদেশে পাঠানো হয়।"],
+  ["04", "Install", "নিজে লাগান, অথবা আমাদের টিমকে বলুন।"],
 ];
 const faqs = [
   [
-    "বাসার জন্য কত kW solar দরকার?",
-    "মাঝারি বাসায় 5–8 kW ভালো শুরু হতে পারে। তবে সঠিক size মাসিক unit, দিনের load এবং ছাদের জায়গার ওপর নির্ভর করে।",
+    "এই লাইটে গ্রিডের বিদ্যুৎ লাগে?",
+    "না। সেটের নিজের প্যানেল দিনে চার্জ হয়, রাতে ব্যাটারি থেকে আলো জ্বলে। মাসিক বিদ্যুৎ বিল নেই।",
   ],
   [
-    "Net metering কীভাবে কাজ করে?",
-    "দিনে অতিরিক্ত solar electricity grid-এ যায় এবং bi-directional meter সেটি হিসাব করে। পরে ব্যবহৃত grid unit-এর সঙ্গে সমন্বয় হয়—প্রযোজ্য utility নিয়ম অনুযায়ী।",
+    "কমপ্লিট সেটে কী কী থাকে?",
+    "প্রকাশিত কমপ্লিট সেটে LED লাইট, সোলার প্যানেল, ব্যাটারি, পোল ও ফিটিংস থাকে। মডেলভেদে রিমোটও থাকে।",
   ],
   [
-    "লোডশেডিংয়ের সময় solar চলবে?",
-    "সাধারণ on-grid system grid বন্ধ হলে নিরাপত্তার জন্য বন্ধ হয়। Backup চাইলে hybrid inverter ও battery প্রয়োজন।",
+    "দাম কত?",
+    "Filatec 100W কমপ্লিট ৳৬,৫০০, 200W কমপ্লিট ৳৮,৫০০, 300W কমপ্লিট ৳১১,০০০। বাকি মডেলের দাম কলে জানানো হয়।",
   ],
   [
-    "Panel-এর warranty কত?",
-    "আমাদের নির্বাচিত tier-1 modules দীর্ঘমেয়াদি performance warranty সহ আসে। Inverter ও battery warranty proposal-এ স্পষ্টভাবে দেওয়া থাকে।",
+    "ওয়ারেন্টি কতদিন?",
+    "অর্ডারের সময় জানিয়ে দেওয়া হয়। এখনকার স্ট্রিট লাইট কাজে শোরুমে ১ বছরের ওয়ারেন্টি বলা আছে।",
   ],
 ];
-const money = (n: number) =>
-  new Intl.NumberFormat("en-BD", {
-    style: "currency",
-    currency: "BDT",
-    maximumFractionDigits: 0,
-  }).format(n);
 
 export default function HomePage({ products }: { products: HomeProduct[] }) {
   const [menu, setMenu] = useState(false),
-    [bill, setBill] = useState(12000),
+    [light, setLight] = useState(0),
+    [qty, setQty] = useState(4),
     [faq, setFaq] = useState(0),
     [sent, setSent] = useState(false);
-  const estimate = useMemo(() => {
-    const kw = Math.max(2, Math.round((bill / 11 / 120) * 10) / 10);
-    return { kw, save: Math.round(bill * 0.72), price: kw * 95000 };
-  }, [bill]);
+  const chosen = lights[light];
+  const total = chosen.price * qty;
   return (
     <main>
       <div className="top">
-        <span>সারাদেশে ফ্রি প্রাথমিক consultation</span>
+        <span>সোলার স্ট্রিট লাইট · সারাদেশে ডেলিভারি</span>
         <a href="tel:+8801711064667">
           <Phone />
           +880 1711-064667
@@ -131,11 +114,11 @@ export default function HomePage({ products }: { products: HomeProduct[] }) {
           </span>
         </Link>
         <nav className={menu ? "open" : ""}>
-          <Link href="/solutions">Solutions</Link>
+          <Link href="/products">Shop</Link>
           <Link href="/projects">Projects</Link>
-          <Link href="/net-metering">Net metering</Link>
+          <Link href="/solutions">Street lights</Link>
           <Link href="/about">About</Link>
-          <a href="#calculator">Savings</a>
+          <a href="#calculator">Prices</a>
           <AccountMenu onNavigate={() => setMenu(false)} />
           <Link className="navCta" href="/contact">
             Get a free quote <ArrowRight />
@@ -147,63 +130,64 @@ export default function HomePage({ products }: { products: HomeProduct[] }) {
       </header>
       <section className="hero" id="home">
         <Image
-          src="/solar-hero.png"
-          alt="Solar panels across green hills"
+          src="/facebook/cctv-lighting.jpg"
+          alt="Nirvana solar street light at night"
           fill
           priority
+          sizes="100vw"
         />
         <div className="shade" />
         <div className="heroCopy">
-          <label>● Bangladesh’s trusted solar partner</label>
+          <label>● Solar street lights from Sylhet</label>
           <h1>
-            আপনার ছাদে
+            রাস্তার আলো।
             <br />
-            <em>নিজের বিদ্যুৎ।</em>
+            <em>বিল ছাড়া।</em>
           </h1>
           <p>
-            বিদ্যুৎ বিল কমান, লোডশেডিং থেকে মুক্ত থাকুন—বাড়ি ও ব্যবসার জন্য
-            smart, reliable solar solution.
+            Filatec, MODI ও Nirvana সোলার স্ট্রিট লাইট। দিনে চার্জ হয়, সন্ধ্যা
+            থেকে ভোর পর্যন্ত রাস্তা, বাড়ি ও বাগান আলোকিত থাকে।
           </p>
           <div className="actions">
-            <a className="btn" href="#calculator">
-              Calculate your savings <ArrowRight />
-            </a>
-            <a href="#process">কীভাবে কাজ করে ↓</a>
+            <Link className="btn" href="/products">
+              Shop street lights <ArrowRight />
+            </Link>
+            <a href="#process">কীভাবে হয় ↓</a>
           </div>
           <div className="trust">
             <span>
               <ShieldCheck />
-              Certified installation
+              Complete sets with pole
             </span>
             <span>
               <Zap />
-              Net metering support
+              No monthly electric bill
             </span>
             <span>
               <Leaf />
-              Clean energy, every day
+              Delivery in 64 districts
             </span>
           </div>
         </div>
         <aside>
-          <small>আজকের সম্ভাব্য উৎপাদন</small>
+          <small>প্রকাশিত কমপ্লিট সেট</small>
           <strong>
-            24.8 <i>kWh</i>
+            6,500 <i>৳</i>
           </strong>
           <div className="bars">
-            {[35, 55, 78, 95, 100, 82, 59, 30].map((h, i) => (
+            {[40, 62, 100].map((h, i) => (
               <b key={i} style={{ height: h + "%" }} />
             ))}
           </div>
-          <small>Typical 5 kW rooftop system</small>
+          <small>100W · 200W ৳8,500 · 300W ৳11,000</small>
         </aside>
       </section>
       <section className="proof">
         {[
-          ["10+", "years expertise"],
-          ["650+", "systems installed"],
-          ["18 MW", "clean energy"],
-          ["64", "districts covered"],
+          ["10–400W", "street light range"],
+          ["৳6,500", "100W complete set"],
+          ["1 year", "warranty on current work"],
+          ["64", "districts we deliver to"],
         ].map((x) => (
           <div key={x[1]}>
             <strong>{x[0]}</strong>
@@ -214,16 +198,16 @@ export default function HomePage({ products }: { products: HomeProduct[] }) {
       <section className="section solutions" id="solutions">
         <div className="heading">
           <div>
-            <label>OUR SOLUTIONS</label>
+            <label>STREET LIGHTS</label>
             <h2>
-              Solar that fits
+              Light for the
               <br />
-              <em>your ambition.</em>
+              <em>road you have.</em>
             </h2>
           </div>
           <p>
-            বাংলাদেশের আবহাওয়া, grid এবং দৈনিক ব্যবহার মাথায় রেখে design করা
-            solution. শুধু panel নয়—একটি complete energy system.
+            গলি, রাস্তা, মার্কেট, কারখানা বা চা-বাগান—জায়গা অনুযায়ী ওয়াট বাছুন।
+            কমপ্লিট সেটে লাইটের সঙ্গে প্যানেল, ব্যাটারি ও পোল থাকে।
           </p>
         </div>
         <div className="cards">
@@ -250,83 +234,91 @@ export default function HomePage({ products }: { products: HomeProduct[] }) {
       </section>
       <section className="calculator" id="calculator">
         <div>
-          <label>SOLAR SAVINGS CALCULATOR</label>
+          <label>STREET LIGHT PRICE</label>
           <h2>
-            আপনার বিল কতটা
+            কয়টি লাইট,
             <br />
-            <em>কমতে পারে?</em>
+            <em>কত দাম?</em>
           </h2>
           <p>
-            মাসিক bill দিন। আমরা প্রাথমিক system size, সম্ভাব্য savings এবং
-            investment দেখাব।
+            যে তিনটি Filatec কমপ্লিট সেটের দাম প্রকাশিত, সেগুলো দিয়ে হিসাব।
+            অন্য ওয়াটের দাম কলে জানানো হয়।
           </p>
           <small>
-            * চূড়ান্ত হিসাব site survey, tariff ও load profile-এর ওপর নির্ভরশীল।
+            * ডেলিভারি {formatBdt(SHIPPING_FEE)}। {formatBdt(FREE_SHIPPING_FROM)} থেকে ফ্রি।
           </small>
         </div>
         <div className="calc">
-          <label>আপনার মাসিক বিদ্যুৎ বিল</label>
+          <label>লাইট বাছুন</label>
           <strong>
-            {money(bill)} <small>/ মাস</small>
+            {formatBdt(total)} <small>/ {qty}টি</small>
           </strong>
+          <div className="chipRow">
+            {lights.map((item, index) => (
+              <button key={item.name} type="button" className={light === index ? "active" : ""} onClick={() => setLight(index)}>
+                {item.name}
+              </button>
+            ))}
+          </div>
           <input
             type="range"
-            min="3000"
-            max="200000"
-            step="1000"
-            value={bill}
-            onChange={(e) => setBill(+e.target.value)}
+            min="1"
+            max="20"
+            step="1"
+            value={qty}
+            onChange={(e) => setQty(+e.target.value)}
+            aria-label="Number of lights"
           />
           <div className="range">
-            <span>৳3,000</span>
-            <span>৳2,00,000</span>
+            <span>1 light</span>
+            <span>20 lights</span>
           </div>
           <div className="results">
             <div>
-              <span>System</span>
-              <b>{estimate.kw} kW</b>
+              <span>Each</span>
+              <b>{formatBdt(chosen.price)}</b>
             </div>
             <div>
-              <span>Monthly saving</span>
-              <b>≈ {money(estimate.save)}</b>
+              <span>Quantity</span>
+              <b>{qty}</b>
             </div>
             <div>
-              <span>Investment</span>
-              <b>≈ {money(estimate.price)}</b>
+              <span>Lights total</span>
+              <b>{formatBdt(total)}</b>
             </div>
           </div>
-          <a className="btn dark" href="#quote">
-            Get accurate proposal <ArrowRight />
-          </a>
+          <Link className="btn dark" href="/products">
+            See all street lights <ArrowRight />
+          </Link>
         </div>
       </section>
       <section className="section why">
         <div className="visual">
-          <Image src="/solar-hero.png" alt="Solar installation" fill />
+          <Image src="/facebook/filatec-200w.jpg" alt="Filatec 200W solar street light set" fill sizes="50vw" />
           <span>
             <BatteryCharging />
-            <small>OPTIONAL BATTERY BACKUP</small>
-            <b>Power, even when the grid is down.</b>
+            <small>CHARGES BY DAY</small>
+            <b>Lights the road after dusk.</b>
           </span>
         </div>
         <div>
           <label>WHY NIRVANA POWER TECH</label>
           <h2>
-            Engineered for
+            Street lights,
             <br />
-            <em>Bangladesh.</em>
+            <em>ready to install.</em>
           </h2>
           <p>
-            উচ্চ তাপমাত্রা, আর্দ্রতা, ধুলা, বজ্রপাত এবং ছাদের কাঠামো—সব বিবেচনায়
-            নিয়েই প্রতিটি Nirvana Power Tech system তৈরি হয়।
+            গরম, বৃষ্টি ও ধুলোর জন্য বানানো স্ট্রিট লাইট। Jail Road, Sylhet
+            শোরুম থেকে সারাদেশে পাঠানো হয়।
           </p>
           <ul>
             {[
-              "Tier-1 modules and proven inverters",
-              "Structural and electrical safety check",
-              "Net-metering documentation support",
-              "Live monitoring on your phone",
-              "Local after-sales service",
+              "Filatec, MODI and Nirvana brands",
+              "Complete sets with panel, battery and pole",
+              "Dusk-to-dawn lighting",
+              "Published prices on 100W, 200W and 300W",
+              "Local support from Sylhet",
             ].map((x) => (
               <li key={x}>
                 <Check />
@@ -390,14 +382,11 @@ export default function HomePage({ products }: { products: HomeProduct[] }) {
         <div>
           <label>A SIMPLE PROCESS</label>
           <h2>
-            From bill to
+            From order to
             <br />
-            <em>sun-powered.</em>
+            <em>a lit road.</em>
           </h2>
-          <p>
-            একজন dedicated engineer শুরু থেকে commissioning পর্যন্ত আপনার সাথে
-            থাকবেন।
-          </p>
+          <p>কোন ওয়াট লাগবে, কয়টি পোল—সেটা বলে দিলে সেট পাঠিয়ে দিই।</p>
         </div>
         <div className="steps">
           {steps.map((s) => (
@@ -419,7 +408,7 @@ export default function HomePage({ products }: { products: HomeProduct[] }) {
             <br />
             <em>উত্তর এখানে।</em>
           </h2>
-          <p>আরও জানতে আমাদের solar advisor-এর সাথে কথা বলুন।</p>
+          <p>আরও জানতে WhatsApp-এ লিখুন।</p>
           <a href="https://wa.me/8801711064667">
             <MessageCircle /> WhatsApp us
           </a>
@@ -438,15 +427,13 @@ export default function HomePage({ products }: { products: HomeProduct[] }) {
       </section>
       <section className="quote" id="quote">
         <div>
-          <label>FREE SOLAR ASSESSMENT</label>
+          <label>ASK FOR A STREET LIGHT</label>
           <h2>
-            চলুন আপনার
+            কোন রাস্তায়
             <br />
-            <em>solar plan করি.</em>
+            <em>লাইট লাগবে?</em>
           </h2>
-          <p>
-            Form পূরণ করুন। আমাদের advisor এক কর্মদিবসের মধ্যে যোগাযোগ করবেন।
-          </p>
+          <p>ফর্ম পূরণ করুন। এক কর্মদিবসের মধ্যে যোগাযোগ করা হবে।</p>
           <a href="tel:+8801711064667">
             <Phone /> +880 1711-064667
           </a>
@@ -489,28 +476,27 @@ export default function HomePage({ products }: { products: HomeProduct[] }) {
                 <option value="" disabled>
                   Select district
                 </option>
-                <option>Dhaka</option>
-                <option>Chattogram</option>
-                <option>Gazipur</option>
-                <option>Rajshahi</option>
-                <option>Other</option>
+                {DISTRICTS.map((district) => (
+                  <option key={district}>{district}</option>
+                ))}
               </select>
             </label>
             <label>
-              System
+              Light
               <select>
-                <option>Home solar</option>
-                <option>Commercial</option>
-                <option>Industrial</option>
-                <option>Battery backup</option>
+                <option>100W street light</option>
+                <option>200W street light</option>
+                <option>300W street light</option>
+                <option>400W street light</option>
+                <option>Not sure yet</option>
               </select>
             </label>
             <label className="full">
-              মাসিক bill
-              <input type="number" placeholder="যেমন: 12000" />
+              কয়টি লাইট
+              <input type="number" min={1} placeholder="যেমন: 4" />
             </label>
             <button className="btn full">
-              Request free assessment <ArrowRight />
+              Request a quote <ArrowRight />
             </button>
           </form>
         )}
@@ -526,16 +512,14 @@ export default function HomePage({ products }: { products: HomeProduct[] }) {
             </span>
           </Link>
           <p>
-            বাংলাদেশের প্রতিটি ছাদকে clean, affordable power source-এ রূপ দেওয়াই
-            আমাদের লক্ষ্য।
+            Jail Road, Sylhet থেকে সোলার স্ট্রিট লাইট। রাস্তা, বাড়ি, মসজিদ ও বাগানের জন্য।
           </p>
         </div>
         <div>
           <b>Explore</b>
           <Link href="/products">Shop</Link>
-          <Link href="/solutions">Solutions</Link>
+          <Link href="/solutions">Street lights</Link>
           <Link href="/projects">Projects</Link>
-          <Link href="/net-metering">Net metering</Link>
           <Link href="/about">About us</Link>
           <Link href="/admin">Admin</Link>
         </div>

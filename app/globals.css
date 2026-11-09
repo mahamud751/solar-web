@@ -178,6 +178,10 @@ td small{display:block;color:var(--muted);margin-top:4px}
 .orderSummary label{display:grid;gap:6px;font-size:11px;font-weight:800;text-transform:uppercase}
 .orderSummary select{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:#f7f8f4;font-size:13px}
 .orderSummary .iconBtn{width:100%}
+.hero img{object-position:center 18%}
+.calc .chipRow{margin:14px 0}
+.calc .chipRow button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:800;cursor:pointer}
+.calc .chipRow button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
 .imageField{grid-column:1/-1;display:grid;grid-template-columns:168px 1fr;gap:16px;align-items:center}
 .imagePreview{position:relative;width:168px;height:168px;border:1px solid var(--line);border-radius:16px;background:#f7f8f4;overflow:hidden;display:grid;place-items:center}
 .imagePreview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
